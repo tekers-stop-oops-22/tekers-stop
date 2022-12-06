@@ -22,10 +22,6 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        if(localStorage.getItem('userid') == null) {
-            // const navigate = useNavigate();
-            // navigate('/login');
-        }
     fetch('api/v1/product', {method: 'GET'})
         .then(response => {
             response.json().then(data => {

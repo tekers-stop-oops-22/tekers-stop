@@ -9,6 +9,7 @@ export default function ProductPage() {
   const [qty, setQty] = useState(1);
   const [item, setItem] = useState({});
   const [displayItems, setDisplayItems] = useState([]);
+  const [cartText, setCartText] = useState('Add to Cart');
   const { productId } = useParams();
 
   useEffect(() => {
@@ -42,16 +43,34 @@ export default function ProductPage() {
             <h6>{item?.name}</h6>
             <h4>{item?.description}</h4>
             <h2>${item?.price}</h2>
-            <select>
+            {/* <select>
                 <option>Select Size</option>
                 <option>Small</option>
                 <option>Medium</option>
                 <option>Large</option>
                 <option>XL</option>
                 <option>XXL</option>
-            </select>
-            <input type="number" value={qty} onChange={e => setQty(e.target.value > 0 ? e.target.value : 1)}/>
-            <button class="normal">Add to Cart</button>
+            </select> */}
+            <input type="number" value={qty} onChange={e => {
+                const newVal = e.target.value > 0 ? e.target.value : 1;
+                setQty(newVal);
+            }}/>
+            <button class="normal" onClick={e => {
+                const userId = localStorage.getItem('userId');
+                fetch(`/api/v1/user/${userId}/cart`, {
+                    method: 'PUT',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                      'id': item.id,
+                      'quantity': qty, 
+                    })
+                  }).then(res => {
+                    setCartText('Added to Cart');
+                    setTimeout(() => {setCartText('Add to Cart')}, 3000);
+                });
+            }}>{cartText}</button>
             <h4>Product Details</h4>
             <span>dsjchjsdkcajcnkaskcals</span>
         </div>

@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react';
+import AdminItem from '../components/admin_item';
+import adminItem from '../components/admin_item';
+import AdminUserItem from '../components/admin_user_item';
 import CartItem from '../components/cart_item';
 import NavBar from '../components/navbar';
 import PageFooter from '../components/page_footer';
 import '../style.css';
 
-export default function CartPage() {
-  const userId = localStorage.getItem('userId');
-  const [cartItems, setCartItems] = useState([]);
+export default function AdminPage() {
   const [allProducts, setAllProducts] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
 
-  useEffect(() => {
+  const fetchProducts = () => {
     fetch('/api/v1/product', {method: 'GET'})
     .then(response => {
       response.json()
@@ -17,43 +19,36 @@ export default function CartPage() {
         setAllProducts(data);
       })
     });
-    fetch(`/api/v1/user/${userId}/cart`, {method:'GET'})
+  }
+
+  const fetchUsers = () => {
+    fetch('/api/v1/user', {method: 'GET'})
     .then(response => {
       response.json()
       .then(data => {
-        console.log(data);
-        setCartItems(data);
+        setAllUsers(data);
       })
+    });
+  }
+
+  const deleteUserItem = (id) => {
+    console.log('Deleting item');
+    fetch(`/api/v1/product/${id}`, {
+      method: 'DELETE'
+    }).then(resp => {
+      fetchUsers();
     })
+  }
+
+  useEffect(() => {
+    fetchProducts();
+    fetchUsers();
   })
 
-  const getItemPrice = (id) => {
-    for(var product of allProducts) {
-      console.log(product.id, id);
-      if(product.id === id) {
-        return product.price;
-      }
-    }
-  };
-
-  const totalPrice = () => {
-    let _price = 0;
-    for(var cartItem of cartItems) {
-      _price += cartItem.quantity * getItemPrice(cartItem.id);
-    }
-    return _price;
-  };
 
   return (
     <div>
-      <NavBar active="cart" />
-
-    {/* <!--Header page--> */}
-    <section id="page-header" class="about-header">
-        <h2>#let's talk</h2>
-        <p>random text</p>
-
-    </section>
+      {/* <NavBar active="cart" /> */}
 
     <section id="cart" class="section-p1">
         <table width="100%">
@@ -62,15 +57,14 @@ export default function CartPage() {
                     <td>Remove</td>
                     <td>Image</td>
                     <td>Product</td>
+                    <td>Description</td>
                     <td>Price</td>
-                    <td>Quantity</td>
-                    <td>Subtotal</td>
                 </tr>
             </thead>
             <tbody>
                 {
-                  cartItems.map(function(cartItem, i) {
-                    return <CartItem item={cartItem} />
+                  allProducts.map(function(adminItem, i) {
+                    return <AdminItem item={adminItem} deleteUser={deleteUserItem}/>
                   })
                 }
 
@@ -80,7 +74,29 @@ export default function CartPage() {
 
     </section>
 
-    <section id="cart-add" class="section-p1">
+    <section id="cart" class="section-p1">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <td>Remove</td>
+                    <td>Avatar</td>
+                    <td>Username</td>
+                    <td>Balance</td>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                  allUsers.map(function(adminItem, i) {
+                    return <AdminUserItem item={adminItem} />
+                  })
+                }
+            </tbody>
+
+        </table>
+
+    </section>
+
+    {/* <section id="cart-add" class="section-p1">
         <div id="coupon">
             <h3>Apply Coupon</h3>
             <div>
@@ -107,7 +123,7 @@ export default function CartPage() {
             </table>
             <button class="normal">Proceed to chechout</button>
         </div>
-    </section>
+    </section> */}
 
 
 

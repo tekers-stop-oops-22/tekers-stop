@@ -47,7 +47,7 @@ export default function LoginPage() {
                 .then(data => {
                   console.log('Login Data =', data);
                   if(data != null) {
-                    localStorage.setItem('userId', data.id);
+                    localStorage.setItem('userId', data);
                     console.log('Reached here');
                     navigate('/');
                   }

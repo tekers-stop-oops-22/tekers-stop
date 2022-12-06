@@ -26,7 +26,8 @@ export default function PageFooter() {
         <div className="row">
 
             <div className="col">
-                <img className="logo" img src={logo} width="100px" height="100px" alt="" />
+                {/* Logo to be fixed here */}
+                {/* <img className="logo" img src={logo} width="100px" height="100px" alt="" /> */}
                 <h4>Contact</h4>
                 <p><strong>Address: </strong>BITS Pilani </p>
                 <p><strong>Hours: </strong>9:00-22:30,Mon-Sat </p>
