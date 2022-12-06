@@ -1,52 +1,51 @@
 package com.techrsstop.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.UUID;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "products")
 public class Product {
-    private final UUID id;
+    @Id
+    @GeneratedValue
+    private long id;
 
-    @NotNull
-    private final double price;
-    @NotBlank
-    private final String imageUrl;
-    @NotBlank
-    private final String name;
-    @NotBlank
-    private final String description;
+    private double price;
 
-    public Product(@JsonProperty("id") UUID id,
-                   @JsonProperty("price") double price,
-                   @JsonProperty("imageUrl") String imageUrl,
-                   @JsonProperty("name") String name,
-                   @JsonProperty("description") String description) {
-        this.id = id;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.name = name;
-        this.description = description;
-    }
+    private String imageUrl;
 
-    public double getPrice() {
-        return price;
-    }
+    private String name;
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+    private String description;
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public UUID getId() {
-        return id;
-    }
+//    public double getPrice() {
+//        return price;
+//    }
+//
+//    public String getImageUrl() {
+//        return imageUrl;
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public UUID getId() {
+//        return id;
+//    }
 }

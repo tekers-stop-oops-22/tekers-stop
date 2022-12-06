@@ -1,9 +1,8 @@
 package com.techrsstop.demo.service;
 
-import com.techrsstop.demo.dao.ProductDao;
+import com.techrsstop.demo.dao.ProductRepository;
 import com.techrsstop.demo.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,30 +11,37 @@ import java.util.UUID;
 
 @Service
 public class ProductService {
-    public final ProductDao productDao;
+
+    private final ProductRepository productRepository;
 
     @Autowired
-    public ProductService(@Qualifier("productDao") ProductDao productDao) {
-        this.productDao = productDao;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     public void addProduct(Product product) {
-        productDao.insertProduct(product);
+        productRepository.save(product);
     }
 
     public List<Product> getAllProducts() {
-        return productDao.getAllProducts();
+        return productRepository.findAll();
     }
 
-    public Optional<Product> getProductById(UUID id) {
-        return productDao.getProductById(id);
+    public Optional<Product> getProductById(long id) {
+        return productRepository.findById(id);
     }
 
-    public void deleteProduct(UUID id) {
-        productDao.deleteProduct(id);
+    public void deleteProduct(long id) {
+        productRepository.deleteById(id);
     }
 
-    public void updateProduct(UUID id, Product product) {
-        productDao.updateProduct(id, product);
+    public void updateProduct(long id, Product product) {
+        Product _product =  productRepository.findById(id).orElse(null);
+        assert _product != null;
+        _product.setName(product.getName());
+        _product.setDescription(product.getDescription());
+        _product.setPrice(product.getPrice());
+        _product.setImageUrl(product.getImageUrl());
+        productRepository.save(_product);
     }
 }

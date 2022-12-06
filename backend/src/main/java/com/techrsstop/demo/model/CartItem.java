@@ -1,27 +1,24 @@
 package com.techrsstop.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.UUID;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "cart_item")
 public class CartItem {
-    private final UUID productId;
+    private long product;
+    private long user;
+    @Id
+    @GeneratedValue
+    private long id;
     private int quantity;
 
-    public CartItem(@JsonProperty("id") UUID productId, @JsonProperty("quantity") int quantity) {
-        this.productId = productId;
-        this.quantity = quantity;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public UUID getProductId() {
-        return productId;
-    }
 }
