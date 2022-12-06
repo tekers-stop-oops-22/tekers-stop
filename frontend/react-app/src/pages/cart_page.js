@@ -10,19 +10,31 @@ export default function CartPage() {
   const [allProducts, setAllProducts] = useState([]);
 
   useEffect(() => {
+    let products = [];
     fetch('/api/v1/product', {method: 'GET'})
     .then(response => {
       response.json()
       .then(data => {
+        products = data;
         setAllProducts(data);
       })
     });
-    fetch(`/api/v1/user/${userId}/cart`, {method:'GET'})
+    fetch(`/api/v1/cart/${userId}/`, {method:'GET'})
     .then(response => {
       response.json()
       .then(data => {
-        console.log(data);
-        setCartItems(data);
+        let seen = {};
+        for(var product of products)
+          seen[`${product.id}`] = false;
+        
+        let cart = [];
+        for(var i = data.length - 1; i >= 0; i--) {
+          if(!seen[data[i].product]) {
+            seen[data[i].product] = true;
+            cart.push(data[i]);
+          }
+        }
+        setCartItems(cart);
       })
     })
   })

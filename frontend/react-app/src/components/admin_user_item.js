@@ -7,7 +7,11 @@ export default function AdminUserItem(props) {
       <tr>
         <td>
           <a href="#" onClick={e => {
-            props.deleteUser(props.item.id);
+            console.log('Deleting item');
+            console.log(props.item.id);
+            fetch(`/api/v1/user/${props.item.id}`, {
+              method: 'DELETE'
+            });
           }}>
             <i class="far fa-times-circle"></i>
           </a>

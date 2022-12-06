@@ -19,7 +19,7 @@ export default function ProductPage() {
         response.json()
         .then(data => {
             for(var product of data) {
-                if(product.id === productId) {
+                if(product.id === parseInt(productId, 10)) {
                     setItem(product);
                     setDisplayItems(data);
                     window.scrollTo(0, 0);
@@ -28,7 +28,7 @@ export default function ProductPage() {
             }
         })
     });
-  }, [productId]);
+  });
 
   return (
     <div>
@@ -56,14 +56,15 @@ export default function ProductPage() {
                 setQty(newVal);
             }}/>
             <button class="normal" onClick={e => {
-                const userId = localStorage.getItem('userId');
-                fetch(`/api/v1/user/${userId}/cart`, {
-                    method: 'PUT',
+                const userId = parseInt(localStorage.getItem('userId'), 10);
+                fetch(`/api/v1/cart/`, {
+                    method: 'POST',
                     headers: {
                       'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                      'id': item.id,
+                      'product': item.id,
+                      'user': userId,
                       'quantity': qty, 
                     })
                   }).then(res => {

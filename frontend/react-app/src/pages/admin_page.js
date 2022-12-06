@@ -11,7 +11,7 @@ export default function AdminPage() {
   const [allProducts, setAllProducts] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
 
-  const fetchProducts = () => {
+  useEffect(() => {
     fetch('/api/v1/product', {method: 'GET'})
     .then(response => {
       response.json()
@@ -19,9 +19,6 @@ export default function AdminPage() {
         setAllProducts(data);
       })
     });
-  }
-
-  const fetchUsers = () => {
     fetch('/api/v1/user', {method: 'GET'})
     .then(response => {
       response.json()
@@ -29,20 +26,6 @@ export default function AdminPage() {
         setAllUsers(data);
       })
     });
-  }
-
-  const deleteUserItem = (id) => {
-    console.log('Deleting item');
-    fetch(`/api/v1/product/${id}`, {
-      method: 'DELETE'
-    }).then(resp => {
-      fetchUsers();
-    })
-  }
-
-  useEffect(() => {
-    fetchProducts();
-    fetchUsers();
   })
 
 
@@ -64,7 +47,7 @@ export default function AdminPage() {
             <tbody>
                 {
                   allProducts.map(function(adminItem, i) {
-                    return <AdminItem item={adminItem} deleteUser={deleteUserItem}/>
+                    return <AdminItem item={adminItem}/>
                   })
                 }
 

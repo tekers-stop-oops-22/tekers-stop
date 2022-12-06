@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import logo from '../img/logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../login.css';
 
 export default function SignUpPage() {
   const [username, setUsername] = useState('');
   const [pass, SetPass] = useState('');
+  const navigate = useNavigate();
   return (
     <div className="wrapper">
       <div class="logo">
@@ -29,8 +30,9 @@ export default function SignUpPage() {
                 <label>Password</label>
             </div>
             <div class="pass">Forgot Password?</div>
-            <input type="submit" value="Login" onSubmit={e => {
-              fetch('/api/v1/user/login', {
+            <input type="submit" value="Sign Up" onClick={e => {
+              e.preventDefault();
+              fetch('/api/v1/user/sign', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -38,10 +40,25 @@ export default function SignUpPage() {
                 body: JSON.stringify({
                   name: username,
                   password: pass,
-                  cart: []
+                  balance: 0,
+                  avatarUrl: `https://avatars.dicebear.com/api/micah/${username}.svg`
+                })
+              }).then(resp => {
+                resp.json()
+                .then(data => {
+                  console.log('Login Data =', data);
+                  if(data != null) {
+                    localStorage.setItem('userId', data);
+                    console.log('Reached here');
+                    navigate('/');
+                  }
+                  else {
+                    setUsername('');
+                    SetPass('');
+                    alert('Some Error occured');
+                  }
                 })
               })
-              e.preventDefault();
             }}/>
             <div class="signup_link">
                 Already have an account? <Link to='/login'>Login</Link>

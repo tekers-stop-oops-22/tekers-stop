@@ -4,7 +4,7 @@ import pImage from "../img/products/f1.jpg";
 import '../style.css';
 
 export default function CartItem(props) {
-  const userId = localStorage.getItem('userId');
+  const userId = parseInt(localStorage.getItem('userId'), 10);
   const [qty, setQty] = useState(props.item.quantity);
   const [cartItem, setCartItem] = useState({});
 

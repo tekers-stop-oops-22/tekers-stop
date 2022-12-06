@@ -32,15 +32,14 @@ export default function LoginPage() {
             <div className="pass">Forgot Password?</div>
             <input type="submit" value="Login" onClick={e => {
               e.preventDefault();
-              fetch('/api/v1/user/sign', {
+              fetch('/api/v1/user/log', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                   name: username,
-                  password: pass,
-                  cart: []
+                  password: pass
                 })
               }).then(resp => {
                 resp.json()
