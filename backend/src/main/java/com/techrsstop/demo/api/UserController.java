@@ -24,6 +24,9 @@ public class UserController {
         }
         User storedUser = _user.get();
         if(user.getPassword().equals(storedUser.getPassword())) {
+            if(storedUser.isAdminUser()) {
+                return 1000 + storedUser.getId();
+            }
             return storedUser.getId();
         }
         return 0;

@@ -12,6 +12,9 @@ import CartPage from './pages/cart_page';
 import LoginPage from './pages/login_page';
 import SignUpPage from './pages/signup_page';
 import AdminPage from './pages/admin_page';
+import UserPage from './pages/user_page';
+import AddItemPage from './pages/add_item_page';
+import AddUserPage from './pages/add_user_page';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +48,18 @@ const router = createBrowserRouter([
   {
     path: '/admin',
     element: <AdminPage />
+  },
+  {
+    path: '/user',
+    element: <UserPage />
+  },
+  {
+    path: '/additem',
+    element: <AddItemPage />
+  },
+  {
+    path: '/adduser',
+    element: <AddUserPage />
   }
 ]);
 

@@ -23,6 +23,7 @@ public class User {
     private String name;
 
     private int balance;
+    private boolean adminUser;
 
     private String password;
     private String avatarUrl;

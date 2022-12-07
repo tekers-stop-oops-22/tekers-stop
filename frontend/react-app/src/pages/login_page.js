@@ -12,7 +12,7 @@ export default function LoginPage() {
       <div className="logo">
         <Link to="/"><img src={logo} width="60px" height="60px" className="logo" alt="" /></Link>
     </div>
-    <div className="center">
+    <div className="center my-3">
         <h1>Login</h1>
         <form method="post">
             <div className="txt_field">
@@ -29,7 +29,7 @@ export default function LoginPage() {
                 <span></span>
                 <label>Password</label>
             </div>
-            <div className="pass">Forgot Password?</div>
+            {/* <div className="pass">Forgot Password?</div> */}
             <input type="submit" value="Login" onClick={e => {
               e.preventDefault();
               fetch('/api/v1/user/log', {
@@ -46,9 +46,13 @@ export default function LoginPage() {
                 .then(data => {
                   console.log('Login Data =', data);
                   if(data != null) {
-                    localStorage.setItem('userId', data);
-                    console.log('Reached here');
-                    navigate('/');
+                    if(data > 1000) {
+                      localStorage.setItem('userId', data - 1000);
+                      navigate('/admin');
+                    } else {
+                      localStorage.setItem('userId', data);
+                      navigate('/');
+                    }
                   }
                   else {
                     setUsername('');

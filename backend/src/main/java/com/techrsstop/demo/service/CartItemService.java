@@ -20,7 +20,7 @@ public class CartItemService {
 
 
     public void addCartItem(CartItem item) {
-        cartItemRepository.save(item);
+        updateCartItem(item, true);
     }
 
     public void deleteCartItem(long id) {
@@ -46,9 +46,21 @@ public class CartItemService {
         cartItemRepository.save(_exItem);
     }
 
-    public void updateCartItem(CartItem item) {
+    public void updateCartItem(CartItem item, boolean addQty) {
         CartItem _exItem = cartItemRepository.findByUserAndProduct(item.getUser(), item.getProduct());
-        _exItem.setQuantity(item.getQuantity());
+        if(_exItem == null) {
+            cartItemRepository.save(item);
+            return;
+        }
+        if(addQty) {
+            _exItem.setQuantity(_exItem.getQuantity() + item.getQuantity());
+        } else {
+            _exItem.setQuantity(item.getQuantity());
+        }
         cartItemRepository.save(_exItem);
+    }
+
+    public void clearCart(long id) {
+        cartItemRepository.deleteByUser(id);
     }
 }

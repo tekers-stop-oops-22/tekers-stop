@@ -22,7 +22,6 @@ export default function ProductPage() {
                 if(product.id === parseInt(productId, 10)) {
                     setItem(product);
                     setDisplayItems(data);
-                    window.scrollTo(0, 0);
                     return;
                 }
             }
@@ -72,8 +71,6 @@ export default function ProductPage() {
                     setTimeout(() => {setCartText('Add to Cart')}, 3000);
                 });
             }}>{cartText}</button>
-            <h4>Product Details</h4>
-            <span>dsjchjsdkcajcnkaskcals</span>
         </div>
     </section>
 

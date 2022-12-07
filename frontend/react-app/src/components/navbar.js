@@ -13,8 +13,8 @@ export default function NavBar(props) {
             <ul id="navbar">
                 <li><Link className={props.active == 'home' ? "active" : ""} to="/">Home</Link></li>
                 <li><Link className={props.active == 'shop' ? "active" : ""} to="/shop/1">Shop</Link></li>
-                <li><Link className={props.active == 'about' ? "active" : ""} to="/about">About</Link></li>
-                <li><Link className={props.active == 'contact' ? "active" : ""} to="/contact">Contacts</Link></li>
+                <li><Link className={props.active == 'login' ? "active" : ""} to="/login" onClick={e => localStorage.removeItem('userId')}>Logout</Link></li>
+                <li><Link className={props.active == 'account' ? "active" : ""} to="/user">Account</Link></li>
                 <li lg="lg-bag"><Link className={props.active == 'cart' ? "active" : ""} to="/cart"><i className="fas fa-shopping-cart"></i></Link></li>
                 <a href="#" id="close"><i className="far fa-times"></i></a>
             </ul>

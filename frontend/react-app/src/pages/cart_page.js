@@ -5,17 +5,17 @@ import PageFooter from '../components/page_footer';
 import '../style.css';
 
 export default function CartPage() {
-  const userId = localStorage.getItem('userId');
+  const userId = parseInt(localStorage.getItem('userId'), 10);
+  const [checkout, setCheckout] = useState('Checkout');
+  const [total, setTotal] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
 
   useEffect(() => {
-    let products = [];
     fetch('/api/v1/product', {method: 'GET'})
     .then(response => {
       response.json()
       .then(data => {
-        products = data;
         setAllProducts(data);
       })
     });
@@ -23,21 +23,11 @@ export default function CartPage() {
     .then(response => {
       response.json()
       .then(data => {
-        let seen = {};
-        for(var product of products)
-          seen[`${product.id}`] = false;
-        
-        let cart = [];
-        for(var i = data.length - 1; i >= 0; i--) {
-          if(!seen[data[i].product]) {
-            seen[data[i].product] = true;
-            cart.push(data[i]);
-          }
-        }
-        setCartItems(cart);
+        setCartItems(data);
+        updateTotal();
       })
     })
-  })
+  });
 
   const getItemPrice = (id) => {
     for(var product of allProducts) {
@@ -51,10 +41,16 @@ export default function CartPage() {
   const totalPrice = () => {
     let _price = 0;
     for(var cartItem of cartItems) {
-      _price += cartItem.quantity * getItemPrice(cartItem.id);
+      _price += cartItem.quantity * getItemPrice(cartItem.product);
     }
     return _price;
   };
+
+  const updateTotal = () => {
+    const _total = totalPrice();
+    console.log(_total);
+    setTotal(_total);
+  }
 
   return (
     <div>
@@ -82,7 +78,7 @@ export default function CartPage() {
             <tbody>
                 {
                   cartItems.map(function(cartItem, i) {
-                    return <CartItem item={cartItem} />
+                    return <CartItem item={cartItem}/>
                   })
                 }
 
@@ -106,7 +102,7 @@ export default function CartPage() {
             <table>
                 <tr>
                     <td>Cart Subtotal</td>
-                    <td>${totalPrice()}</td>
+                    <td>${total}</td>
                 </tr>
                 <tr>
                     <td>Shipping</td>
@@ -114,15 +110,42 @@ export default function CartPage() {
                 </tr>
                 <tr>
                     <td><strong>Total</strong></td>
-                    <td><strong>${totalPrice()}</strong></td>
+                    <td><strong>${total}</strong></td>
                 </tr>
             </table>
-            <button class="normal">Proceed to chechout</button>
+            <button class="normal" onClick={e => {
+              fetch(`/api/v1/user/${userId}`, {method: 'GET'})
+              .then(resp => {
+                resp.json()
+                .then(data => {
+                  if(data === null) return;
+
+                  if(total > data.balance) {
+                    alert('Insufficient balance');
+                  } else {
+                    fetch(`/api/v1/user/${userId}`, {
+                      method: 'PUT',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                        name: data.name,
+                        balance: data.balance - total,
+                        avatarUrl: data.avatarUrl,
+                        password: data.password
+                      })
+                    })
+                    fetch(`/api/v1/cart/${userId}`, {method: 'DELETE'})
+                    .then(resp => {
+                      setCheckout('Order successful!');
+                      setTimeout(() => setCheckout('Checkout'), 3000);
+                    })
+                  }
+                })
+              })
+            }}>{checkout}</button>
         </div>
     </section>
-
-
-
 
     {/* <!--footer section--> */}
     <PageFooter />

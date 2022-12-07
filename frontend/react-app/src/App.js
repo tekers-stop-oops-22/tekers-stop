@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useEffect, useState} from 'react';
 import hero4 from './img/hero4.png';
 import f1 from "./img/features/f1.png";
 import f2 from "./img/features/f2.png";
@@ -10,28 +10,27 @@ import './style.css';
 import NavBar from './components/navbar';
 import ShopItem from './components/shop_item';
 import PageFooter from './components/page_footer';
+import { useNavigate } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
 
-export default class App extends Component {
+export default function App() {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            items: [],
-        };
+    const [items, setItems] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if(userId === null) {
+        navigate('/login');
     }
-
-    componentDidMount() {
     fetch('api/v1/product', {method: 'GET'})
         .then(response => {
             response.json().then(data => {
-                console.log(data);
-                this.setState({items: data});
+                setItems(data);
             })
         });
-    }
-
-  render() { 
+    }, [items]);
+ 
     return (
     <div className="App">
       <NavBar active="home"/>
@@ -92,9 +91,11 @@ export default class App extends Component {
         <p>Summer Collection New Morden Design</p>
         <div className="pro-container">
             {
-                this.state.items.map(function(item, i) {
+                items.map(function(item, i) {
                     if(i < 4)
                     return <ShopItem item={item}/>
+                    else
+                    return <></>
                 })
             }
         </div>
@@ -134,6 +135,5 @@ export default class App extends Component {
     <PageFooter />
     </div>
   );
-  }
 }
 

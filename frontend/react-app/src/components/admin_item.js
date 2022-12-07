@@ -6,9 +6,11 @@ export default function AdminItem(props) {
   return (
       <tr>
         <td>
-          <a href="#">
-            <i class="far fa-times-circle"></i>
-          </a>
+            <i class="far fa-times-circle" onClick={e => {
+            fetch(`/api/v1/product/${props.item.id}`, {
+              method: 'DELETE'
+            })
+          }}></i>
         </td>
         <td>
           <img src={props.item?.imageUrl} alt="" height="70px"/>

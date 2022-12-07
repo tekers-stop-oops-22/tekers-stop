@@ -29,7 +29,7 @@ export default function SignUpPage() {
                 <span></span>
                 <label>Password</label>
             </div>
-            <div class="pass">Forgot Password?</div>
+            {/* <div class="pass">Forgot Password?</div> */}
             <input type="submit" value="Sign Up" onClick={e => {
               e.preventDefault();
               fetch('/api/v1/user/sign', {

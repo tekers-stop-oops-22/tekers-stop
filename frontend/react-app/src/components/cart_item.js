@@ -9,14 +9,14 @@ export default function CartItem(props) {
   const [cartItem, setCartItem] = useState({});
 
   useEffect(() => {
-    fetch(`/api/v1/product/${props.item.id}`, {method:'GET'})
+    fetch(`/api/v1/product/${props.item.product}`, {method:'GET'})
     .then(responce => {
       responce.json()
       .then(data => {
         setCartItem(data);
       });
     })
-  })
+  }, []);
 
   return (
       <tr>
@@ -32,17 +32,18 @@ export default function CartItem(props) {
         <td>${cartItem?.price}</td>
         <td>
           <input type="number" value={qty} onChange={e => {
-            const newVal = e.target.value > 0 ? e.target.value : 1;
-            const added = e.target.value > qty;
+            if(e.target.value < 0) return;
+            const newVal = e.target.value;
             setQty(newVal);
-            fetch(`/api/v1/user/${userId}/cart`, {
+            fetch(`/api/v1/cart/`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                'id': props.item.id,
-                'quantity': added ? 1 : -1, 
+                'product': props.item.product,
+                'user': userId,
+                'quantity': newVal, 
               })
             });
           }}/>

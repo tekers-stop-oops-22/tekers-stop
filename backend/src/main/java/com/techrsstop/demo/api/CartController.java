@@ -28,12 +28,17 @@ public class CartController {
 
     @PutMapping
     public void updateCartItem(@RequestBody CartItem item) {
-        cartService.updateCartItem(item);
+        cartService.updateCartItem(item, false);
     }
 
     @PutMapping("{user}/{product}")
     public void increment(@PathVariable("user") long userId, @PathVariable("product") long product) {
         cartService.increment(userId, product);
+    }
+
+    @DeleteMapping(path = "{id}")
+    public void clearCart(@PathVariable("id") long id) {
+        cartService.clearCart(id);
     }
 
     @PostMapping
